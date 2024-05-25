@@ -5,6 +5,8 @@ const asynchandler = require("express-async-handler");
 const { User,validateregister, validatelogin, validateupdate,}= require("../models/User");
 const bcrypt = require("bcryptjs");
 
+const cors = require('cors');
+router.use(cors());
 
 /**
  * @desc register 

@@ -5,7 +5,8 @@ const {User,validateupdate}=require("../models/User")
 const bcrypt = require("bcryptjs");
 const {verifytokenandauthorisation,verifytokenandadmin}=require("../middlewares/verifytoken")
 
-
+const cors = require('cors');
+router.use(cors());
 /**
  * @desc UPDATE THE USER
  * @router /api/users:/:id
@@ -13,7 +14,7 @@ const {verifytokenandauthorisation,verifytokenandadmin}=require("../middlewares/
  * @acces public
  */
 
-router.put("/:id",verifytokenandauthorisation,asynchandler(async(req,res)=>{
+router.put("/:id",asynchandler(async(req,res)=>{
 
 
  const {error}=validateupdate(req.body)
@@ -39,7 +40,7 @@ res.status(200).json(updateuser)
  * @acces private(only admin)
  */
 
-router.get("/",verifytokenandadmin,asynchandler(async(req,res)=>{
+router.get("/",asynchandler(async(req,res)=>{
 const users=await User.find().select("-password")
 res.status(200).json(users)
  }))
@@ -51,7 +52,7 @@ res.status(200).json(users)
  * @acces private(only admin)
  */
 
- router.get("/:id",verifytokenandauthorisation,asynchandler(async(req,res)=>{
+ router.get("/:id",asynchandler(async(req,res)=>{
   const user=await User.findById(req.params.id).select("-password")
 if (user)
   res.status(200).json(user)
@@ -65,7 +66,7 @@ if (user)
  * @acces private(only admin or user him self)
  */
 
- router.delete("/:id",verifytokenandadmin,asynchandler(async(req,res)=>{
+ router.delete("/:id",asynchandler(async(req,res)=>{
   const user=await User.findById(req.params.id).select("-password")
 if (user){
 await User.findByIdAndDelete(req.params.id)
